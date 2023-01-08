@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" th:href="@{css/registrationStyle.css}">
+<script type="text/javascript" th:src="@{js/resetPasswordJS.js}"></script>
+  <head>
+    <title>Register</title>
+
+  </head>
+  <body>
+    <div id="container">
+        <header id="header1">
+
+        </header>
+        <div id="content1">
+        <div id="form_cont">
+          <h1>Register</h1>  
+
+          <form th:action="@{/register}" method="post" th:object="${user}">
+            <label for="password2">First name</label>
+              <input type="text" id="name" name="name" autofocus="autofocus" placeholder="name" class="input_c" th:field="*{firstName}"/> <br /><br />
+
+              <label for="password2">Last name</label>
+              <input type="text" id="last_name" name="last_name" placeholder="last name" class="input_c" th:field="*{lastName}"/><br /><br />
+
+              <label for="password2">Email</label>
+              <input type="text" id="username" name="username" autofocus="autofocus" placeholder="email" class="input_c" th:field="*{email}"/><br /> <br />
+
+              <label for="password2">Enter new password</label>
+              <div id="passwordContainer" name="passwordContainer" class="passwordContainer1">
+
+                <div id="pas" class="pass1">
+                <input type="password" id="password2" name="password2" class="input_c" placeholder="password" th:field="*{password1}">
+                </div>
+
+               <div id="image" class="image1">
+                <img id="icon1" src="img/view.png" onclick="function1()"/>
+                </div>
+
+            </div><br/>
+
+                <label for="password1">Confirm password</label>
+            <div id="passwordContainer2" name="passwordContainer2" class="passwordContainer1">
+                <div id="pas2" class="pass1">
+                    <input type="password" id="password1" name="password1" class="input_c" placeholder="password" autofocus="autofocus" th:field="*{password2}"><br/><br/>
+                </div>
+
+                <div id="image2" class="image1">
+                    <img id="icon2" src="img/view.png" onclick="function2()"/>
+            </div>
+            </div><br/><br/>
+
+              <div th:each = "error1: ${tabE}">
+                  <h7 th:text="${error1}"></h7><br/>
+              </div>
+
+              <button id="button1" name="button1">Register</button>
+            </form>
+            
+        </div></div>
+        <footer id="footer1">1</div>
+    </div>
+  </body>
+</html>

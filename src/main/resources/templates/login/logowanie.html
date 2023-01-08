@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link type="text/css" rel="stylesheet" th:href="@{/css/logowanie2.css}" />
+<script type="text/javascript" th:src="@{/js/logowanieJS.js}"></script>
+<head>
+    <title>Login page</title>
+  </head>
+  <body>
+    <div id="container">
+        <header id="header1">
+
+        </header>
+        <div id="content1">
+
+           
+            <div id="form_cont" name="form_cont">
+              <h1>Login</h1>
+
+              <form th:action="@{/login}" method="post">
+              <label for="username">Enter username</label>
+              <input type="text" id="username" name="username" class="input_c" placeholder="email" /> <br /><br />
+
+              <label for="password">Enter password</label>
+              <div id="passwordContainer" name="passwordContainer" class="passwordContainer1">
+                <div id="pas" class="pass1">
+                <input type="password" id="password" name="password" class="input_c" placeholder="password">
+                </div>
+
+               <div id="image" class="image1">
+                <img id="icon1" src="img/view.png" onclick="function1()"/>
+                </div>
+                </div>
+                <a href="#">Forgot password?</a><br/><br/><br/>
+
+
+
+
+                  <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
+                      <p th:text="${session.SPRING_SECURITY_LAST_EXCEPTION}"></p>
+
+                      <div th:text="${@customRemoveAttribute.removeVerificationMessageFromSession()}"></div>
+
+                  </div>
+
+
+
+
+                <button id="button1" name="button1">Log In</button>
+
+
+
+
+              </form>
+                <br/><br/><button type="submit" class="login-with-google-btn" th:onclick="|window.location.href='/oauth2'|">
+                    Sign in with Google
+                </button>
+
+            </div>
+        </div>
+        <footer id="footer1">1</div>
+    </div>
+  </body>
+</html>

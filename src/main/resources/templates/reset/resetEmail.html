@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css"  th:href="@{css/resetPasswordStyle.css}">
+<script type="text/javascript" th:src="@{js/resetPasswordJS.js}"></script>
+<head>
+    <title>Reset</title>
+    <script src="../reset/resetPasswordJS.js"></script>
+</head>
+<body>
+<div id="container">
+    <header id="header1">
+
+    </header>
+    <div id="content1">
+
+        <div id="form_cont" name="form_cont">
+            <h1>Reset password</h1>
+            <h3>Strong password includes *</h3>
+            <form th:action="@{/reset}" method="post" th:object="${resetE}">
+
+                <label for="email">Email</label>
+                <div id="emailContainer" name="emailContainer" class="passwordContainer1">
+                    <div id="ema" class="pass1">
+                        <input type="password" id="email" name="email" class="input_c" placeholder="email" th:field = "*{email}">
+                    </div>
+                </div><br/>
+
+                <h3 th:text="${errorReset}"></h3>
+
+                <button id="button1" name="button1">Reset</button>
+            </form>
+        </div>
+    </div>
+    <footer id="footer1">1</div>
+</div>
+</body>
+</html>
