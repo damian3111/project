@@ -30,6 +30,14 @@
       <a th:href = "@{/insertPost}" class = "btn btn-primary btn-sm mb-3"> Add Joke</a>
     </div>
   </div>
+
+  <div class = "row">
+    <div class = "col-lg-3">
+      <p th:text="${#authentication.principal.email}" class = "btn btn-primary btn-sm mb-3"></p>
+    </div>
+  </div>
+
+
   <table class = "table table-striped table-bordered">
     <thead class = "table-dark">
     <tr>
@@ -45,7 +53,7 @@
       <td th:text = "${post.user.firstName}"></td>
       <td th:text = "${post.user.email}"></td>
       <td th:text = "${post.content}"></td>
-      <td th:if="${oEmail == post.user.email}">
+      <td th:if="${#authentication.principal.email == post.user.email}">
         <a th:href = "@{/editPost/{id}(id=${post.id})}"
            class = "btn btn-primary">Update</a>
 

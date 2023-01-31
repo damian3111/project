@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("Update Post p SET p.content = ?2 WHERE p.id = ?1")
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional
     public int setContentById(Long id, String content);
 

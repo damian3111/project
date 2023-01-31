@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +18,15 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
 
     @Transactional
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("UPDATE AppUser a SET a.enabled = TRUE WHERE a.id = ?1")
-    public int updateEnabled(Long id);
+    int updateEnabled(Long id);
 
-    @Query("Update AppUser a Set a.password = ?2 WHERE a.email = ?1")
+    @Query("Update AppUser a Set a.password = :password WHERE a.email = :email")
     @Transactional
-    @Modifying
-    public int changePassword(String email, String password);
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+     int changePassword(@Param("email") String email, @Param("password") String password);
+
+
+
 }

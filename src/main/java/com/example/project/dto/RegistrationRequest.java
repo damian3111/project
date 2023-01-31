@@ -2,11 +2,15 @@ package com.example.project.dto;
 
 import com.example.project.validator.ValidPassword;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationRequest {
 
     @Size(min = 3, message = "First name should have at least 3 characters")

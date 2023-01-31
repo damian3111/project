@@ -39,7 +39,7 @@ display: none;
                                 type = "text"
                                 id="email"
                                 name = "email"
-                                th:value="${oEmail}"
+                                th:value="${#authentication.principal.email}"
                                 class = "form-control"
                                 placeholder="Enter Content"
                         />

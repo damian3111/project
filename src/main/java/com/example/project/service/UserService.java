@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (!user.getEnabled())
-            throw new Exception("User is disabled");
+            throw new IllegalStateException("User is disabled");
 
         return user;
     }

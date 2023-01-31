@@ -13,6 +13,7 @@ import com.example.project.service.ResetService;
 import com.example.project.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,11 +47,11 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final PostService postService;
 
-
     @ModelAttribute("user")
     public RegistrationRequest registrationRequest(){
         return new RegistrationRequest();
     }
+
 
     @ModelAttribute("resetE")
     public ResetEmailRequest resetRequest(){
@@ -79,8 +80,19 @@ public class UserController {
     }
 
 
+    ////////////////////////////TO DELETE
+
+    @PostMapping("/todelete")
+    public String todetele(@RequestBody RegistrationRequest registrationRequest){
+        System.out.println("asdsadasdasdasdasdhjskhjsdhjfdskhjfdghskjdfgbhsjkdfgbjkhsdfgbhskdjffsd");
+        System.out.println(registrationRequest.getEmail());
+
+        return "register/registration";
+    }
+    /////////////////////////////
+
     @PostMapping("/register")
-    public String registerPost(@Valid @ModelAttribute("user") RegistrationRequest registrationRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
+    public String registerUser(@Valid @ModelAttribute("user")@RequestBody RegistrationRequest registrationRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
         if (registrationRequest.getPassword2().equals(registrationRequest.getPassword1())) {
             List<String> errors = new ArrayList<>();
 
@@ -92,7 +104,6 @@ public class UserController {
                 return "redirect:/register";
             }
             if (!userService.emailValidation(registrationRequest.getEmail())){
-                System.out.println("llllllllll");
                 redirectAttributes.addFlashAttribute("tabE", "Incorrect email address");
                 return "redirect:/register";
             }
@@ -109,14 +120,15 @@ public class UserController {
 
     @GetMapping("/confirm")
     public String confirm(@RequestParam("token") String token) throws Exception {
+        System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" + token);
 
         //TODO
         // przeniesc do service
-
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkk" + token);
         ConfirmationToken confirmationToken = tokenRepository.findByToken(token).orElseThrow(() -> new Exception("Token not found"));
 
         if(confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())){
-            return null;
+            return "redirect:/login";
         }
 
         tokenRepository.updateConfirmedAt(LocalDateTime.now(), confirmationToken.getId());
@@ -175,37 +187,17 @@ public class UserController {
         System.out.println(resetRequest.getPassword1());
         System.out.println(resetRequest.getPassword2());
 
-
+        System.out.println("dddddddddddddddddddddddddddddddddddd" + resetRequest.getPassword1());
         userRepository.changePassword(user.getEmail(), passwordEncoder.encode(resetRequest.getPassword1()));
 
         return "register/registration";
     }
 
     @GetMapping("/posts")
-    public String getPosts(@AuthenticationPrincipal OAuth2User ouser, Model model, Principal principal){
+    public String getPosts(Model model){
         List<Post> posts = postService.getAllPosts();
 
         model.addAttribute("post_attr", posts);
-
-
-        try {
-
-            String[] values = ouser.getAttributes().toString().split(", ");
-
-            List<String> collect = Arrays.stream(values).filter(r -> r.startsWith("email=")).limit(1).collect(Collectors.toList());
-            String a = collect.get(0);
-
-            int length1 = a.length();
-            String substring = a.substring(6, length1 - 1);
-
-            model.addAttribute("oEmail", substring);
-
-
-        }catch (Exception e){
-            model.addAttribute("oEmail", principal.getName());
-
-        }
-
 
         return "posts/posts";
     }
@@ -215,34 +207,7 @@ public class UserController {
 
         Post post = postService.getById(id);
 
-
-
-
-
-        String substring;
-        try {
-
-            String[] values = ouser.getAttributes().toString().split(", ");
-
-            List<String> collect = Arrays.stream(values).filter(r -> r.startsWith("email=")).limit(1).collect(Collectors.toList());
-            String a = collect.get(0);
-
-            int length1 = a.length();
-            substring = a.substring(6, length1 - 1);
-
-
-
-        }catch (Exception e){
-            substring = principal.getName();
-
-        }
-
-
-        System.out.println(substring);
-        System.out.println(post.getUser().getEmail());
-
-        System.out.println(substring.length());
-        System.out.println(post.getUser().getEmail().length());
+        String substring = userService.findEmail(ouser, principal);
 
         if (!substring.equals(post.getUser().getEmail())){
             throw new Exception("Wrong");
@@ -294,30 +259,13 @@ public class UserController {
     }
 
     @GetMapping("/insertPost")
-    public String insertPost(@AuthenticationPrincipal OAuth2User ouser, Model model, Principal principal){
+    public String insertPost(){
 
-        try {
-
-            String[] values = ouser.getAttributes().toString().split(", ");
-
-            List<String> collect = Arrays.stream(values).filter(r -> r.startsWith("email=")).limit(1).collect(Collectors.toList());
-            String a = collect.get(0);
-
-            int length1 = a.length();
-            String substring = a.substring(6, length1 - 1);
-
-            model.addAttribute("oEmail", substring);
-
-
-        }catch (Exception e){
-            model.addAttribute("oEmail", principal.getName());
-
-        }
         return "posts/insertPost";
     }
 
     @PostMapping("/insertPost")
-    public String post_insertPost(@ModelAttribute("postC") PostContentRequest postContentRequest, @AuthenticationPrincipal OAuth2User ouser){
+    public String post_insertPost(@ModelAttribute("postC") PostContentRequest postContentRequest){
 
         try {
 
